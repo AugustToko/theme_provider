@@ -84,18 +84,18 @@ class AppTheme {
   }
 
   /// Default light theme
-  factory AppTheme.light({String? id}) {
+  factory AppTheme.light({String? id, bool? useMaterial3}) {
     return AppTheme(
-      data: ThemeData.light(),
+      data: ThemeData.light(useMaterial3: useMaterial3),
       id: id ?? "default_light_theme",
       description: "Android Default Light Theme",
     );
   }
 
   /// Default dark theme
-  factory AppTheme.dark({String? id}) {
+  factory AppTheme.dark({String? id, bool? useMaterial3}) {
     return AppTheme(
-      data: ThemeData.dark(),
+      data: ThemeData.dark(useMaterial3: useMaterial3),
       id: id ?? "default_dark_theme",
       description: "Android Default Dark Theme",
     );
