@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:theme_provider/theme_provider.dart';
+import '../../theme_provider.dart';
 
 import 'inherited_theme.dart';
 
@@ -10,6 +10,28 @@ typedef void ThemeChanged(AppTheme oldTheme, AppTheme newTheme);
 /// You may wrap separate parts of the app with multiple [ThemeProvider]s
 /// to use multiple theme sections across the app.
 class ThemeProvider extends StatelessWidget {
+
+  /// Creates a [ThemeProvider].
+  /// Wrap [MaterialApp] in [ThemeProvider] to get theme functionalities.
+  /// You may wrap separate parts of the app with multiple [ThemeProvider]s
+  /// to use multiple theme sections across the app.
+  ///
+  /// If you did not specify default themes,
+  /// it would default to the light and dark themes.
+  ThemeProvider({
+    final Key? key,
+    this.providerId = 'default',
+    final List<AppTheme>? themes,
+    this.defaultThemeId,
+    this.onInitCallback,
+    this.onThemeChanged,
+    required this.child,
+    this.saveThemesOnChange = false,
+    this.loadThemeOnInit = false,
+  })  : this.themes = themes ?? [AppTheme.light(), AppTheme.dark()],
+        super(key: key) {
+    assert(this.themes.length >= 2, 'Theme list must have at least 2 themes.');
+  }
   /// The widget below this widget in the tree.
   final Widget child;
 
@@ -41,49 +63,27 @@ class ThemeProvider extends StatelessWidget {
   /// Provide distinct values if you intend to use multiple theme providers.
   final String providerId;
 
-  /// Creates a [ThemeProvider].
-  /// Wrap [MaterialApp] in [ThemeProvider] to get theme functionalities.
-  /// You may wrap separate parts of the app with multiple [ThemeProvider]s
-  /// to use multiple theme sections across the app.
-  ///
-  /// If you did not specify default themes,
-  /// it would default to the light and dark themes.
-  ThemeProvider({
-    Key? key,
-    this.providerId = "default",
-    List<AppTheme>? themes,
-    this.defaultThemeId,
-    this.onInitCallback,
-    this.onThemeChanged,
-    required this.child,
-    this.saveThemesOnChange = false,
-    this.loadThemeOnInit = false,
-  })  : this.themes = themes ?? [AppTheme.light(), AppTheme.dark()],
-        super(key: key) {
-    assert(this.themes.length >= 2, "Theme list must have at least 2 themes.");
-  }
-
   /// Gives reference to a [ThemeCommand] of the nearest [ThemeProvider] up the widget tree
   /// and will provide commands to change the theme.
-  static ThemeController controllerOf(BuildContext context) {
+  static ThemeController controllerOf(final BuildContext context) {
     return InheritedThemeController.of(context);
   }
 
   /// Returns the options passed by the nearest [ThemeProvider] up the widget tree.
   /// Call as `ThemeProvider.optionsOf<ColorClass>(context)` to get the
   /// returned object casted to the required type.
-  static T optionsOf<T extends AppThemeOptions>(BuildContext context) {
+  static T optionsOf<T extends AppThemeOptions>(final BuildContext context) {
     return controllerOf(context).theme.options as T;
   }
 
   /// Returns the current app theme passed by the nearest [ThemeProvider] up the widget tree.
   /// Use as `ThemeProvider.themeOf(context).data` to get [ThemeData].
-  static AppTheme themeOf(BuildContext context) {
+  static AppTheme themeOf(final BuildContext context) {
     return controllerOf(context).theme;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return InheritedThemeController(
       controller: ThemeController(
         providerId: providerId,

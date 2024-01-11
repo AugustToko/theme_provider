@@ -13,6 +13,61 @@ import '../../theme_provider.dart';
 /// ```
 @immutable
 class AppTheme {
+
+  /// Constructs a [AppTheme].
+  /// [data] is required.
+  ///
+  /// [id] is required and it has to be unique.
+  /// Use _ separated lowercase strings.
+  /// Id cannot have spaces.
+  ///
+  /// [options] can ba any object. Use it to pass
+  ///
+  /// [description] is optional. If not given it takes default to as 'Light Theme' or 'Dark Theme'.
+  AppTheme({
+    required this.id,
+    required this.data,
+    required this.description,
+    this.options,
+  }) {
+    assert(description.length < 30, 'Theme description too long ($id)');
+    assert(id.isNotEmpty, 'Id cannot be empty');
+    assert(id.toLowerCase() == id, 'Id has to be a lowercase string');
+    assert(!id.contains(' '), 'Id cannot contain spaces. (Use _ for spaces)');
+  }
+
+  /// Default light theme
+  factory AppTheme.light({final String? id, final bool? useMaterial3}) {
+    return AppTheme(
+      data: ThemeData.light(useMaterial3: useMaterial3),
+      id: id ?? 'default_light_theme',
+      description: 'Android Default Light Theme',
+    );
+  }
+
+  /// Default dark theme
+  factory AppTheme.dark({final String? id, final bool? useMaterial3}) {
+    return AppTheme(
+      data: ThemeData.dark(useMaterial3: useMaterial3),
+      id: id ?? 'default_dark_theme',
+      description: 'Android Default Dark Theme',
+    );
+  }
+
+  /// Additional purple theme constructor
+  factory AppTheme.purple({final String? id}) {
+    final theme = ThemeData.light();
+    return AppTheme(
+      data: theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          secondary: Colors.pink,
+          primary: Colors.purple,
+        ),
+      ),
+      id: id ?? 'default_purple_theme',
+      description: 'Custom Default Purple Theme',
+    );
+  }
   /// [ThemeData] associated with the [AppTheme]
   final ThemeData data;
 
@@ -61,68 +116,13 @@ class AppTheme {
   /// Short description which describes the theme. Must be less than 30 characters.
   final String description;
 
-  /// Constructs a [AppTheme].
-  /// [data] is required.
-  ///
-  /// [id] is required and it has to be unique.
-  /// Use _ separated lowercase strings.
-  /// Id cannot have spaces.
-  ///
-  /// [options] can ba any object. Use it to pass
-  ///
-  /// [description] is optional. If not given it takes default to as 'Light Theme' or 'Dark Theme'.
-  AppTheme({
-    required this.id,
-    required this.data,
-    required this.description,
-    this.options,
-  }) {
-    assert(description.length < 30, "Theme description too long ($id)");
-    assert(id.isNotEmpty, "Id cannot be empty");
-    assert(id.toLowerCase() == id, "Id has to be a lowercase string");
-    assert(!id.contains(" "), "Id cannot contain spaces. (Use _ for spaces)");
-  }
-
-  /// Default light theme
-  factory AppTheme.light({String? id, bool? useMaterial3}) {
-    return AppTheme(
-      data: ThemeData.light(useMaterial3: useMaterial3),
-      id: id ?? "default_light_theme",
-      description: "Android Default Light Theme",
-    );
-  }
-
-  /// Default dark theme
-  factory AppTheme.dark({String? id, bool? useMaterial3}) {
-    return AppTheme(
-      data: ThemeData.dark(useMaterial3: useMaterial3),
-      id: id ?? "default_dark_theme",
-      description: "Android Default Dark Theme",
-    );
-  }
-
-  /// Additional purple theme constructor
-  factory AppTheme.purple({String? id}) {
-    final theme = ThemeData.light();
-    return AppTheme(
-      data: theme.copyWith(
-        colorScheme: theme.colorScheme.copyWith(
-          secondary: Colors.pink,
-          primary: Colors.purple,
-        ),
-      ),
-      id: id ?? "default_purple_theme",
-      description: "Custom Default Purple Theme",
-    );
-  }
-
   /// Creates a copy of this [AppTheme] but with the given fields replaced with the new values.
   /// Id will be replaced by the given [id].
   AppTheme copyWith({
-    required String id,
-    String? description,
-    ThemeData? data,
-    AppThemeOptions? options,
+    required final String id,
+    final String? description,
+    final ThemeData? data,
+    final AppThemeOptions? options,
   }) {
     return AppTheme(
       id: id,

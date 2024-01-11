@@ -10,6 +10,24 @@ typedef Color ColorBuilderByAppTheme(AppTheme theme);
 
 /// Ready-made [SimpleDialog] that gives the option to change theme.
 class ThemeDialog extends StatelessWidget {
+
+  /// Constructor for [ThemeDialog]. Builds a [SimpleDialog] to switch themes.
+  /// Use as:
+  /// ```dart
+  /// showDialog(context: context, builder: (_) => ThemeDialog())
+  /// ```
+  ThemeDialog({
+    this.title = const Text('Select Theme'),
+    this.hasDescription = true,
+    this.innerCircleRadius = 15,
+    this.innerCircleColorBuilder,
+    this.outerCircleColorBuilder,
+    this.animatedOpacityDuration = 200,
+    this.selectedOverlayColor = const Color(0x669E9E9E),
+    this.selectedThemeIcon = const Icon(Icons.check, color: Colors.white),
+  }) {
+    assert(innerCircleRadius <= 20, 'Inner circle max radius exceeds is 20px');
+  }
   /// The (optional) title of the dialog is displayed in a large font at the top
   /// of the dialog.
   final Widget title;
@@ -44,40 +62,22 @@ class ThemeDialog extends StatelessWidget {
   /// Defaults to transparent grey.
   final Color selectedOverlayColor;
 
-  /// Constructor for [ThemeDialog]. Builds a [SimpleDialog] to switch themes.
-  /// Use as:
-  /// ```dart
-  /// showDialog(context: context, builder: (_) => ThemeDialog())
-  /// ```
-  ThemeDialog({
-    this.title = const Text("Select Theme"),
-    this.hasDescription = true,
-    this.innerCircleRadius = 15,
-    this.innerCircleColorBuilder,
-    this.outerCircleColorBuilder,
-    this.animatedOpacityDuration = 200,
-    this.selectedOverlayColor = const Color(0x669E9E9E),
-    this.selectedThemeIcon = const Icon(Icons.check, color: Colors.white),
-  }) {
-    assert(innerCircleRadius <= 20, "Inner circle max radius exceeds is 20px");
-  }
-
   @override
-  Widget build(BuildContext context) {
-    String currentThemeId = ThemeProvider.themeOf(context).id;
+  Widget build(final BuildContext context) {
+    final String currentThemeId = ThemeProvider.themeOf(context).id;
 
     return SimpleDialog(
       title: title,
       children: ThemeProvider.controllerOf(context)
           .allThemes
           .map<Widget>(
-              (theme) => _buildThemeTile(context, theme, currentThemeId))
+              (final theme) => _buildThemeTile(context, theme, currentThemeId))
           .toList(),
     );
   }
 
   /// Capitalize the first letter
-  String _capitalize(String s) {
+  String _capitalize(final String s) {
     if (s.length == 0) {
       return s;
     } else if (s.length == 1) {
@@ -89,11 +89,11 @@ class ThemeDialog extends StatelessWidget {
 
   /// Builds a theme tile
   Widget _buildThemeTile(
-    BuildContext context,
-    AppTheme theme,
-    String currentThemeId,
+    final BuildContext context,
+    final AppTheme theme,
+    final String currentThemeId,
   ) {
-    String themeName = theme.id.split("_").map(_capitalize).join(" ");
+    final String themeName = theme.id.split('_').map(_capitalize).join(' ');
 
     return ListTile(
       leading: Stack(

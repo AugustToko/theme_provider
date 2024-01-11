@@ -3,11 +3,11 @@ abstract class SaveAdapter {
   /// Loads the theme previously saved on disk.
   /// If previous record not found, returns [defaultId].
   /// If [defaultId] is not given `null` will be returned.
-  Future<String?> loadTheme(String providerId, [String? defaultId]);
+  Future<String?> loadTheme(final String providerId, [final String? defaultId]);
 
   /// Saves the given theme id on the disk.
-  Future<void> saveTheme(String providerId, String themeId);
+  Future<void> saveTheme(final String providerId, final String themeId);
 
   /// Remove current configuration from disk.
-  Future<void> forgetTheme(String providerId);
+  Future<void> forgetTheme(final String providerId);
 }
